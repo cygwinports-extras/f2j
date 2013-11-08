@@ -1,0 +1,40 @@
+inherit java
+
+NAME="f2j"
+VERSION=0.8.1
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="Fortran to Java converter"
+DESCRIPTION="Converts a subset of Fortran code (particularly the BLAS and
+LAPACK libraries) to Java."
+HOMEPAGE="http://icl.cs.utk.edu/f2j/"
+SRC_URI="mirror://sourceforge/f2j/f2j-${VERSION}.tgz"
+PATCH_URI="0.8.1-build-cp.patch"
+
+PKG_NAMES="f2j java-f2jutil javadoc-f2jutil"
+f2j_REQUIRES="java-f2jutil"
+f2j_CONTENTS="usr/bin/ usr/share/doc/"
+java_f2jutil_CATEGORY="Java"
+java_f2jutil_SUMMARY="Fortran to Java conversion classes"
+java_f2jutil_CONTENTS=${JAVA_DIR#/}
+javadoc_f2jutil_CATEGORY="Doc"
+javadoc_f2jutil_SUMMARY="${java_f2jutil_SUMMARY} (API docs)"
+javadoc_f2jutil_CONTENTS=${JAVADOC_DIR#/}
+
+src_compile() {
+	lndirs
+	cd ${B}
+	cygconf
+	cygmake
+
+	cd ${B}/util
+	cygjavadoc -d javadoc -sourcepath . -package org.netlib.util
+}
+
+src_install() {
+	cd ${B}
+	dobin src/f2java.exe
+	dojar util/f2jutil.jar
+	newjavadoc util/javadoc/ f2jutil
+	dodoc doc/*.pdf src/LICENSE
+}

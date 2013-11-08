@@ -1,5 +1,0 @@
-category: Java
-requires: java-f2jutil
-sdesc: "Fortran to Java converter"
-ldesc: "Converts a subset of Fortran code (particularly the BLAS and 
-LAPACK libraries) to Java."
